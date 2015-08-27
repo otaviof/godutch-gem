@@ -1,5 +1,10 @@
-require "godutch/version"
+require 'godutch/version'
 
 module Godutch
-  # Your code goes here...
+
+  def self.run
+  end
+
 end
+
+# EOF
