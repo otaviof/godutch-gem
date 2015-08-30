@@ -5,6 +5,7 @@ $LOAD_PATH.unshift(lib_dir_path) unless $LOAD_PATH.include?(lib_dir_path)
 
 require 'godutch/version'
 
+
 Gem::Specification.new do |spec|
   spec.name = 'godutch'
   spec.version = Godutch::VERSION
@@ -27,7 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard', '~> 2.13.0'
   spec.add_development_dependency 'guard-rspec', '~> 4.6.4'
   spec.add_development_dependency 'terminal-notifier-guard', '~> 1.6.4'
-  spec.add_development_dependency 'em-rspec', '~> 0.1.1'
 
   spec.add_dependency 'eventmachine', '~> 1.0.8'
 end
