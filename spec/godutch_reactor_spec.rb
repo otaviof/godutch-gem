@@ -3,6 +3,8 @@ require 'spec_helper'
 
 module TestGoDutchReactor
   include GoDutch::Reactor
+  extend self
+
   @@buffer ||= ""
 
   def send_data data
@@ -22,8 +24,6 @@ module TestGoDutchReactor
     return "Something magick happens..."
   end
 end
-
-include TestGoDutchReactor
 
 describe TestGoDutchReactor do
   describe '#receive_data' do

@@ -1,5 +1,4 @@
 require 'godutch/version'
-require 'eventmachine'
 
 module GoDutch
   @@socket_path = nil
@@ -10,6 +9,7 @@ module GoDutch
     File.umask 0000
     File.unlink(@@socket_path) if File.exists?(@@socket_path)
 
+    require 'eventmachine'
     EM.run do
       ['EXIT', 'SIGCHLD', 'SIGUSR1'].each do |signal|
         Signal.trap(signal) { EM.stop_event_loop }

@@ -7,8 +7,8 @@ require 'json'
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'godutch'
-require 'godutch/packet'
 require 'godutch/reactor'
+require 'godutch/packet'
 
 
 RSpec.configure do |config|

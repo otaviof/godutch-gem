@@ -13,8 +13,6 @@ describe GoDutch do
   before :all do
     @socket_path = '/tmp/rspec-godutch.sock'
     @pid = fork do
-      include TestGoDutch
-
       ['SIGUSR1', 'EXIT', 'SIGCHLD'].each do |signal|
         Signal.trap(signal) { exit! }
       end
