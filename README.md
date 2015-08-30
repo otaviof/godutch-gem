@@ -1,8 +1,23 @@
-# Godutch
+# GoDutch-Gem
+
+The Ruby agent for GoDutch.
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+require 'godutch'
+
+module TestGoDutchGem
+  include GoDutch::Reactor
+
+  def check_test
+    return "Testing something"
+  end
+end
+
+ENV['GODUTCH_SOCKET_PATH'] = '/tmp/godutch-ruby.sock'
+GoDutch::run(TestGoDutchGem)
+```
 
 ## Development
 

@@ -1,4 +1,5 @@
 require 'godutch/version'
+require 'godutch/reactor'
 
 module GoDutch
   @@socket_path = nil
