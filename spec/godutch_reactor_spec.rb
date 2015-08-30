@@ -5,15 +5,19 @@ module TestGoDutchReactor
   include GoDutch::Reactor
   extend self
 
-  @@buffer ||= ""
+  @@buffer ||= ''
 
   def send_data data
     @@buffer << data
     data
   end
 
-  def buffer
-    return @@buffer
+  def buffer data=nil
+    unless data.nil?
+      @@buffer = data
+    else
+      return @@buffer
+    end
   end
 
   def close_connection_after_writing
@@ -26,6 +30,10 @@ module TestGoDutchReactor
 end
 
 describe TestGoDutchReactor do
+  after :each do
+    TestGoDutchReactor::buffer('')
+  end
+
   describe '#receive_data' do
     it 'should fail when receiving non-JSON data' do
       expect {
