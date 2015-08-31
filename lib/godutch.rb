@@ -4,6 +4,8 @@ require 'godutch/reactor'
 module GoDutch
   @@socket_path = nil
 
+  # Runs the reactor through 'eventmachine'.
+  #   +reactor+   Reactor module, that extends GoDutch::Reactor;
   def self.run(reactor)
     set_socket_path()
 
@@ -19,6 +21,9 @@ module GoDutch
     end
   end
 
+  # Imports the socket path from environment variables, if socket path is not
+  # found, it will raise. The idea here is to make deployments easy on the fly
+  # settings on communication with master daemon.
   def self.set_socket_path
     unless ENV.has_key?('GODUTCH_SOCKET_PATH')
       raise "Can't find ENV['GODUTCH_SOCKET_PATH'], hence no communication."

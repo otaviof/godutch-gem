@@ -17,7 +17,6 @@ module GoDutch
     def initialize payload=nil
       @@payload = payload
       parse_payload()
-      # puts "Debug -> payload ##{@@payload}#"
       validate()
     end
 
