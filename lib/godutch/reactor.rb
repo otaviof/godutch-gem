@@ -1,24 +1,26 @@
 require 'godutch/packet'
+require 'godutch/status'
 require 'json'
 
 
 module GoDutch
   module Reactor
+    include GoDutch::Status
+
     def receive_data(payload)
       packet = GoDutch::Packet.new(payload.strip)
 
-      output = nil
+      output = { 'check_name' => packet.command() }
       begin
-        output = self.public_send(packet.command)
-        output = { 'output' => output }.to_json
+        stdout = self.public_send(packet.command)
+        # collecting check status
+        output.merge!(read_status_buffer())
+        output.merge!({ 'stdout' => stdout})
       rescue => e
-        output = {
-          'command' => packet.command,
-          'error' => e,
-        }.to_json
+        output.merge!({ 'error' => e, })
       end
 
-      self.send_data("#{output}\n")
+      self.send_data("#{output.to_json}\n")
       self.close_connection_after_writing()
     end
   end

@@ -4,6 +4,7 @@ module TestGoDutch
   include GoDutch::Reactor
 
   def check_test
+    success "Everything is o'right."
     return 'check_test output'
   end
 end
@@ -17,6 +18,7 @@ describe GoDutch do
         Signal.trap(signal) { exit! }
       end
 
+      puts "*** Running GoDutch on PID #{$$} ***"
       ENV['GODUTCH_SOCKET_PATH'] = @socket_path
       GoDutch::run(TestGoDutch)
     end
@@ -46,8 +48,15 @@ describe GoDutch do
         }.to_json
       ).should be_truthy
       socket.flush().should be_truthy
-      output = socket.readline.strip
-      output.should eq({'output' => 'check_test output'}.to_json)
+      expect(socket.readline.strip).to(
+        eq(
+          { 'check_name' => 'check_test',
+            'check_status' => 0,
+            'output' => "Everything is o'right.",
+            'stdout' => 'check_test output'
+          }.to_json
+        )
+      )
       socket.close()
     end
   end

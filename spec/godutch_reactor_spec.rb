@@ -25,6 +25,9 @@ module TestGoDutchReactor
   end
 
   def check_test_reactor
+    critical "I have a critical."
+    success "Somehow I called a bogus method."
+
     return "Something magick happens..."
   end
 end
@@ -50,7 +53,13 @@ describe TestGoDutchReactor do
         }.to_json
       )
       expect(TestGoDutchReactor::buffer.strip).to(
-        eq({'output' => 'Something magick happens...'}.to_json)
+        eq(
+          { 'check_name' => 'check_test_reactor',
+            'check_status' => 2,
+            'output' => 'I have a critical.',
+            'stdout' => 'Something magick happens...',
+          }.to_json
+        )
       )
     end
   end
