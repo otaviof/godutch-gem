@@ -17,7 +17,11 @@ module GoDutch
         output.merge!(read_status_buffer())
         output.merge!({ 'stdout' => stdout})
       rescue => e
-        output.merge!({ 'error' => e, })
+        output.merge!(
+          { 'check_status' => GoDutch::Status::UNKNOWN,
+            'error' => e,
+          }
+        )
       end
 
       self.send_data("#{output.to_json}\n")

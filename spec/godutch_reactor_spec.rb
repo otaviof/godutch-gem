@@ -63,6 +63,27 @@ describe TestGoDutchReactor do
       )
     end
   end
+
+  describe '#check_bogus' do
+    it 'should report failure when calling a bogus check' do
+      TestGoDutchReactor::receive_data(
+        { 'command' => 'check_bogus',
+          'arguments' => [],
+        }.to_json
+      )
+      expect(TestGoDutchReactor::buffer.strip).to(
+        eq(
+          { 'check_name' => \
+              'check_bogus',
+            'check_status' => \
+              GoDutch::Status::UNKNOWN,
+            'error' => \
+              "undefined method `check_bogus' for TestGoDutchReactor:Module",
+          }.to_json
+        )
+      )
+    end
+  end
 end
 
 # EOF
