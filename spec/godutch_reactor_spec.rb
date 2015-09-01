@@ -25,8 +25,10 @@ module TestGoDutchReactor
   end
 
   def check_test_reactor
-    critical "I have a critical."
-    success "Somehow I called a bogus method."
+    metric({ 'metric1' => 1 })
+    critical('I have a critical.')
+    success('Somehow I called a bogus method.')
+    metric({ 'metric2' => 2 })
 
     return "Something magick happens..."
   end
@@ -57,6 +59,10 @@ describe TestGoDutchReactor do
           { 'check_name' => 'check_test_reactor',
             'check_status' => 2,
             'output' => 'I have a critical.',
+            'metrics' => [
+              { 'metric1' => 1 },
+              { 'metric2' => 2 },
+            ],
             'stdout' => 'Something magick happens...',
           }.to_json
         )

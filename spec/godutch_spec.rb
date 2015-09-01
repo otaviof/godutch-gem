@@ -4,7 +4,8 @@ module TestGoDutch
   include GoDutch::Reactor
 
   def check_test
-    success "Everything is o'right."
+    success("Everything is o'right.")
+    metric({ 'okay' => 1 })
     return 'check_test output'
   end
 end
@@ -55,6 +56,9 @@ describe GoDutch do
           { 'check_name' => 'check_test',
             'check_status' => 0,
             'output' => "Everything is o'right.",
+            'metrics' => [
+              { 'okay' => 1 },
+            ],
             'stdout' => 'check_test output'
           }.to_json
         )

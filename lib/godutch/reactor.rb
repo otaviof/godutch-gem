@@ -1,17 +1,20 @@
 require 'godutch/packet'
 require 'godutch/status'
+require 'godutch/metrics'
 require 'json'
 
 
 module GoDutch
   module Reactor
     include GoDutch::Status
+    include GoDutch::Metrics
 
     def receive_data(payload)
       packet = GoDutch::Packet.new(payload.strip)
 
       # reseting all the buffers we accumulate for a given check
       reset_status_buffer()
+      reset_metrics_buffer()
 
       output = { 'check_name' => packet.command() }
 
@@ -20,6 +23,8 @@ module GoDutch
         stdout = self.public_send(packet.command())
         # collecting status methods (from GoDutch::Status) buffered data
         output.merge!(read_status_buffer())
+        # collecting metrics (from GoDutch::Metrics)
+        output.merge!({ 'metrics' => read_metrics_buffer() })
         # final return on method is also saved
         output.merge!({ 'stdout' => stdout })
       rescue => e
