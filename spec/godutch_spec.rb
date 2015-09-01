@@ -35,19 +35,21 @@ describe GoDutch do
     it 'should have received the socket path from environment' do
       # have received the socket means that event-machine is already handling
       # it, so it can be found on the file-system
-      File.exists?(@socket_path).should be_truthy
+      expect(File.exists?(@socket_path)).to be_truthy
     end
   end
 
   describe '#check_test' do
     it 'should be able to receive data on socket' do
-      socket = UNIXSocket.new(@socket_path)
-      socket.write(
-        { 'command' => 'check_test',
-          'arguments' => [],
-        }.to_json
-      ).should be_truthy
-      socket.flush().should be_truthy
+      socket = UNIXSocket.new(@socket_path) or raise
+      expect(
+        socket.write(
+          { 'command' => 'check_test',
+            'arguments' => [],
+          }.to_json
+        )
+      ).to be_truthy
+      expect(socket.flush()).to be_truthy
       expect(socket.readline.strip).to(
         eq(
           { 'check_name' => 'check_test',

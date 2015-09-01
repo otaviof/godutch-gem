@@ -4,19 +4,19 @@ require 'spec_helper'
 describe GoDutch::Status do
   describe '#warning' do
     it 'should be able to call warning status' do
-      GoDutch::Status::warning('warning').should be_truthy
+      expect(GoDutch::Status::warning('warning')).to be_truthy
     end
   end
 
   describe '#critical' do
     it 'should be able to call warning status' do
-      GoDutch::Status::critical('critical').should be_truthy
+      expect(GoDutch::Status::critical('critical')).to be_truthy
     end
   end
 
   describe '#success' do
     it 'should be able to call warning status' do
-      GoDutch::Status::success('success').should be_truthy
+      expect(GoDutch::Status::success('success')).to be_truthy
     end
   end
 

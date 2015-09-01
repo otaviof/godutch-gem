@@ -13,7 +13,7 @@ describe GoDutch::Packet do
 
   describe '#new' do
     it 'takes one optional argument to create a new Packet' do
-      @packet.should be_an_instance_of GoDutch::Packet
+      expect(@packet).to be_an_instance_of(GoDutch::Packet)
     end
 
     it 'should be able to parse informed payload' do
