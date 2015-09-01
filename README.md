@@ -4,19 +4,39 @@ The Ruby agent for GoDutch.
 
 ## Usage
 
-```
+``` ruby
 require 'godutch'
 
-module TestGoDutchGem
+module MyAppMonitoring
   include GoDutch::Reactor
 
-  def check_test
-    return "Testing something"
+  def check_myapp_connected_users
+    app = MyApp::Monitoring.new()
+    
+    unless app.database.alive?
+      critical('Database is not responding!')
+    end
+    
+    connected_users = app.database.connected_users()
+    
+    case connected_users
+    when connected_users <= 0
+      warning('No users connected, attention!')
+    when connected_users >= 10
+      success('At least 10 consumers connected.')
+    when connected_users >= 100
+      warning('A lot of users connected!')
+    when connected_users >= 333
+      critical('Way too many users!')
+    end
+    
+    metric({ 'myapp_connected_users' => connected_users })
   end
 end
 
-ENV['GODUTCH_SOCKET_PATH'] = '/tmp/godutch-ruby.sock'
-GoDutch::run(TestGoDutchGem)
+GoDutch::run(MyAppMonitoring)
+
+# EOF
 ```
 
 ## Development
