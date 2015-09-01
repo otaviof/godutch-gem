@@ -10,12 +10,18 @@ module GoDutch
     def receive_data(payload)
       packet = GoDutch::Packet.new(payload.strip)
 
+      # reseting all the buffers we accumulate for a given check
+      reset_status_buffer()
+
       output = { 'check_name' => packet.command() }
+
       begin
-        stdout = self.public_send(packet.command)
-        # collecting check status
+        # trying to call method name on self
+        stdout = self.public_send(packet.command())
+        # collecting status methods (from GoDutch::Status) buffered data
         output.merge!(read_status_buffer())
-        output.merge!({ 'stdout' => stdout})
+        # final return on method is also saved
+        output.merge!({ 'stdout' => stdout })
       rescue => e
         output.merge!(
           { 'check_status' => GoDutch::Status::UNKNOWN,
