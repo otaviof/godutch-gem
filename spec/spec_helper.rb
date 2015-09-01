@@ -10,6 +10,7 @@ require 'godutch'
 require 'godutch/reactor'
 require 'godutch/packet'
 require 'godutch/status'
+require 'godutch/metrics'
 
 
 RSpec.configure do |config|
