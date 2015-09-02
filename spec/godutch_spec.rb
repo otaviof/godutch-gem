@@ -8,6 +8,14 @@ module TestGoDutch
     metric({ 'okay' => 1 })
     return 'check_test output'
   end
+  
+  def dummy_method
+    puts 'I should never be called.'
+  end
+
+  def check_second_test
+    puts 'Foo'
+  end
 end
 
 
@@ -55,7 +63,7 @@ describe GoDutch do
       expect(socket.readline.strip).to(
         eq(
           { 'name' => '__list_check_methods',
-            'stdout' =>  ['check_test'],
+            'stdout' =>  ['check_test', 'check_second_test'],
           }.to_json
         )
       )

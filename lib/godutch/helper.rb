@@ -8,6 +8,7 @@ module GoDutch
     # Looking for all Helper checks, which by convention start with attribute
     # 'helper_start_with' value. Returns a array of strings, method names.
     def __list_helper_methods
+      # avoiding '__self__' and '__id__' symbols with last regexp part
       return self.methods.grep(/^#{@@helper_start_with}.*?[^__]$/) do |method|
         method.to_s
       end
