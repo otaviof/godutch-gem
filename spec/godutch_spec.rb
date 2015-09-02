@@ -8,7 +8,7 @@ module TestGoDutch
     metric({ 'okay' => 1 })
     return 'check_test output'
   end
-  
+
   def dummy_method
     puts 'I should never be called.'
   end
@@ -22,6 +22,8 @@ end
 describe GoDutch do
   before :all do
     @socket_path = '/tmp/rspec-godutch.sock'
+    # running a GoDutch instance on a fork, where communication between
+    # processes is executed via regular unix-socket, simulating real usage
     @pid = fork do
       ['SIGUSR1', 'EXIT', 'SIGCHLD'].each do |signal|
         Signal.trap(signal) { exit! }
@@ -29,6 +31,7 @@ describe GoDutch do
 
       puts "*** Running GoDutch on PID #{$$} ***"
       ENV['GODUTCH_SOCKET_PATH'] = @socket_path
+      ENV['GODUTCH_CHECK_PREFIX'] = 'check_'
       GoDutch::run(TestGoDutch)
     end
     Process.detach(@pid)
