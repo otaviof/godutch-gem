@@ -45,18 +45,15 @@ module GoDutch
           # collecting output of status methods (from GoDutch::Status)
           output.merge!(read_status_buffer())
           # collecting metrics (from GoDutch::Metrics)
-          output.merge!({ 'metrics' => read_metrics_buffer() })
+          output['metrics'] = read_metrics_buffer()
         else
           raise "[ERROR] Invalid command: '#{command}'"
         end
         # final return on method is also saved
-        output.merge!({ 'stdout' => stdout })
+        output['stdout'] = stdout
       rescue => e
-        output.merge!(
-          { 'status' => GoDutch::Status::UNKNOWN,
-            'error' => e,
-          }
-        )
+        output['status'] = GoDutch::Status::UNKNOWN
+        output['error'] = e
       end
 
       # calling methods from EventMachine, to communicate only once and close
