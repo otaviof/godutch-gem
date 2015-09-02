@@ -54,7 +54,7 @@ describe GoDutch do
       expect(socket.flush()).to be_truthy
       expect(socket.readline.strip).to(
         eq(
-          { 'check_name' => '__list_check_methods',
+          { 'name' => '__list_check_methods',
             'stdout' =>  ['check_test'],
           }.to_json
         )
@@ -76,8 +76,8 @@ describe GoDutch do
       expect(socket.flush()).to be_truthy
       expect(socket.readline.strip).to(
         eq(
-          { 'check_name' => 'check_test',
-            'check_status' => 0,
+          { 'name' => 'check_test',
+            'status' => 0,
             'output' => "Everything is o'right.",
             'metrics' => [
               { 'okay' => 1 },

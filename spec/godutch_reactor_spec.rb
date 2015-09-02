@@ -56,8 +56,8 @@ describe TestGoDutchReactor do
       )
       expect(TestGoDutchReactor::buffer.strip).to(
         eq(
-          { 'check_name' => 'check_test_reactor',
-            'check_status' => 2,
+          { 'name' => 'check_test_reactor',
+            'status' => 2,
             'output' => 'I have a critical.',
             'metrics' => [
               { 'metric1' => 1 },
@@ -79,8 +79,8 @@ describe TestGoDutchReactor do
       )
       expect(TestGoDutchReactor::buffer.strip).to(
         eq(
-          { 'check_name' => 'check_bogus',
-            'check_status' => GoDutch::Status::UNKNOWN,
+          { 'name' => 'check_bogus',
+            'status' => GoDutch::Status::UNKNOWN,
             'error' => "[ERROR] Invalid command: 'check_bogus'",
           }.to_json
         )

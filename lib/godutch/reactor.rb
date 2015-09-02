@@ -22,7 +22,7 @@ module GoDutch
     def receive_data(payload)
       packet = GoDutch::Packet.new(payload.strip)
       command = packet.command()
-      output = { 'check_name' => command }
+      output = { 'name' => command }
 
       # inspecting code for local check names and helper methods
       @helper_methods ||= __list_helper_methods()
@@ -53,7 +53,7 @@ module GoDutch
         output.merge!({ 'stdout' => stdout })
       rescue => e
         output.merge!(
-          { 'check_status' => GoDutch::Status::UNKNOWN,
+          { 'status' => GoDutch::Status::UNKNOWN,
             'error' => e,
           }
         )

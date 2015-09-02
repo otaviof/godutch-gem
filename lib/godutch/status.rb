@@ -29,13 +29,13 @@ module GoDutch
       # in case we already have a status being store, and thus the decision
       # method will be based on the highest status
       unless @@status_buffer.empty?
-        if @@status_buffer['check_status'] > status
+        if @@status_buffer['status'] > status
           return true
         end
       end
 
       @@status_buffer = {
-        'check_status' => status,
+        'status' => status,
         'output' => message,
       }
     end

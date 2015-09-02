@@ -40,12 +40,10 @@ describe GoDutch::Status do
       success('success').should be_truthy
       warning('warning').should be_truthy
 
-      expect(read_status_buffer()).to have_key('check_status')
+      expect(read_status_buffer()).to have_key('status')
       expect(read_status_buffer()).to have_key('output')
       expect(read_status_buffer['output']).to eq('unknown')
-      expect(read_status_buffer['check_status']).to eq(
-        GoDutch::Status::UNKNOWN
-      )
+      expect(read_status_buffer['status']).to eq(GoDutch::Status::UNKNOWN)
     end
   end
 end
