@@ -79,12 +79,9 @@ describe TestGoDutchReactor do
       )
       expect(TestGoDutchReactor::buffer.strip).to(
         eq(
-          { 'check_name' => \
-              'check_bogus',
-            'check_status' => \
-              GoDutch::Status::UNKNOWN,
-            'error' => \
-              "undefined method `check_bogus' for TestGoDutchReactor:Module",
+          { 'check_name' => 'check_bogus',
+            'check_status' => GoDutch::Status::UNKNOWN,
+            'error' => "[ERROR] Invalid command: 'check_bogus'",
           }.to_json
         )
       )

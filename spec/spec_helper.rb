@@ -11,6 +11,7 @@ require 'godutch/reactor'
 require 'godutch/packet'
 require 'godutch/status'
 require 'godutch/metrics'
+require 'godutch/helper'
 
 
 RSpec.configure do |config|

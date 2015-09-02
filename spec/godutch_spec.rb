@@ -40,6 +40,29 @@ describe GoDutch do
     end
   end
 
+  # testing a included method by GoDutch::Helper, to list local checks
+  describe '#__list_check_methods' do
+    it 'should be able to list checks methods' do
+      socket = UNIXSocket.new(@socket_path) or raise
+      expect(
+        socket.write(
+          { 'command' => '__list_check_methods',
+            'arguments' => [],
+          }.to_json
+        )
+      ).to be_truthy
+      expect(socket.flush()).to be_truthy
+      expect(socket.readline.strip).to(
+        eq(
+          { 'check_name' => '__list_check_methods',
+            'stdout' =>  ['check_test'],
+          }.to_json
+        )
+      )
+      socket.close()
+    end
+  end
+
   describe '#check_test' do
     it 'should be able to receive data on socket' do
       socket = UNIXSocket.new(@socket_path) or raise
