@@ -76,10 +76,6 @@ GoDutch::run(MyApp::Monitoring)
 
 At the end on `run` method we delegate this code to be executed via `GoDutch`, which in fact behaves in a similar way to a application server.
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run
-`bin/console` for an interactive prompt that will allow you to experiment.
 
 ## Contributing
 

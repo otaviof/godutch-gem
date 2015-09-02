@@ -7,7 +7,7 @@ require 'json'
 
 module GoDutch
   # Meant to work as a EventMachine reactor, adding a thin wrapper to a custom
-  # monitoring module. Adds the ability to call and list avaiable checks.
+  # monitoring module. Adds the ability to call and list available checks.
   module Reactor
     include GoDutch::Helper
     include GoDutch::Status
@@ -29,9 +29,9 @@ module GoDutch
       @check_methods ||= __list_check_methods()
 
       begin
-        # calling internal and externally defined commands, tranlated into
-        # Module's method names, and for security and configurational reasons
-        # only checks that matches pre-defined names will be called
+        # calling internal and externally defined commands, translated into
+        # Module's method names, and for security and configuration related
+        # reasons only checks that matches pre-defined names will be called
         case
         when @helper_methods.include?(command)
           # only calling method name

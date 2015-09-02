@@ -17,7 +17,7 @@ module GoDutch
       return @@metrics_buffer
     end
 
-    # Accumulate a metric on the buffer, each meatric is a hash stored on a
+    # Accumulate a metric on the buffer, each metric is a hash stored on a
     # array of hashes (@@metrics_buffer).
     #   +data+  Hash format, keys and values representing a given measurement;
     def metric(data={})
