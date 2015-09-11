@@ -25,7 +25,7 @@ describe GoDutch do
     it 'should fail when dummy packet is informed' do
       dummy_error = {
         'name' => nil,
-        'status' => 3,
+        'status' => GoDutch::Status::UNKNOWN,
         'error' => "Error on parsing JSON: '757: unexpected token at 'dummy''",
       }.to_json
 
@@ -58,7 +58,7 @@ describe GoDutch do
 
       output = {
         'name' => 'check_test',
-        'status' => 0,
+        'status' => GoDutch::Status::SUCCESS,
         'output' => "Everything is o'right.",
         'metrics' => [ { 'okay' => 1 }, ],
         'stdout' => 'check_test output'

@@ -41,10 +41,19 @@ describe TestGoDutchReactor do
 
   describe '#receive_line' do
     it 'should fail when receiving non-JSON data' do
+      # JSON returns a different error code on Windows, so simulating this
+      # exception and saving to create the expected output
+      json_error = nil
+      begin
+        JSON.parse('dummy')
+      rescue JSON::ParserError => e
+        json_error = e
+      end
+
       output = {
         'name' => nil,
-        'status' => 3,
-        'error' => "Error on parsing JSON: '757: unexpected token at 'dummy''",
+        'status' => GoDutch::Status::UNKNOWN,
+        'error' => "Error on parsing JSON: '#{json_error}'",
       }.to_json
 
       expect { TestGoDutchReactor::receive_line('dummy') }.to(
@@ -62,7 +71,7 @@ describe TestGoDutchReactor do
 
       output = {
         'name' => 'check_test_reactor',
-        'status' => 2,
+        'status' => GoDutch::Status::CRITICAL,
         'output' => 'I have a critical.',
         'metrics' => [ { 'metric1' => 1 }, { 'metric2' => 2 }, ],
         'stdout' => 'Something magick happens...',
