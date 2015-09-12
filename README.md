@@ -1,10 +1,13 @@
-# GoDutch-Gem
+# `GoDutch-Gem`
 
 Ruby interface for a [`GoDutch`](https://github.com/otaviof/godutch) agent, based on [`eventmachine`](https://github.com/eventmachine/eventmachine).
 
 ## Abstract
 
-A interface to map monitoring checks to Ruby methods using `GoDutch`, which will spawn and control the execution of those checks via the offering of NRPE compatible daemon. And as a `GoDutch` premise, the check containers are going to behave as a daemon themselves, adding performance and re-use of monitored application variables to be informed into metrics sub-systems.t
+This is a Ruby Gem to write nagios-like checks to be executed using `GoDutch` daeamon. `GoDutch` project aims to bring monitoring checks based code closer to your application project, being a first class citezen on that context. Also, it adds a lot of responsivenss to the monitoring layer and makes easy to reuse monitoring variables to ship into metrics sub-system.
+
+`GoDutch` execute the checks in a application server fashion, using standard input and output to send requests and read outputs, please consider this project's tests (under `spec` folder) to see examples of possible calls.
+
 
 ## Installing
 
@@ -75,12 +78,3 @@ GoDutch::run(MyApp::Monitoring)
 ```
 
 At the end on `run` method we delegate this code to be executed via `GoDutch`, which in fact behaves in a similar way to a application server.
-
-
-## Contributing
-
-1. Fork it (https://github.com/otaviof/godutch-gem/fork);
-2. Create your feature branch (`git checkout -b my-new-feature`);
-3. Commit your changes (`git commit -am 'Add some feature'`);
-4. Push to the branch (`git push origin my-new-feature`);
-5. Create a new Pull Request;
