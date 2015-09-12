@@ -1,5 +1,3 @@
-require 'socket'
-require 'godutch'
 require 'json'
 
 
@@ -15,10 +13,10 @@ require 'godutch/helper'
 
 
 RSpec.configure do |config|
-   config.expect_with :rspec do |expectations|
+  config.expect_with :rspec do |expectations|
     expectations.syntax = :should, :expect
   end
-   config.raise_errors_for_deprecations!
+  config.raise_errors_for_deprecations!
 end
 
 # EOF

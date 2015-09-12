@@ -4,7 +4,7 @@ Ruby interface for a [`GoDutch`](https://github.com/otaviof/godutch) agent, base
 
 ## Abstract
 
-A interface to map monitoring checks to Ruby methods using `GoDutch`, which will spawn and control the execution of those checks via the offering of NRPE compatible daemon. And as a `GoDutch` premise, the check containers are going to behave as a daemon themslves, adding performance and re-use of monitored application variables.
+A interface to map monitoring checks to Ruby methods using `GoDutch`, which will spawn and control the execution of those checks via the offering of NRPE compatible daemon. And as a `GoDutch` premise, the check containers are going to behave as a daemon themselves, adding performance and re-use of monitored application variables to be informed into metrics sub-systems.t
 
 ## Installing
 

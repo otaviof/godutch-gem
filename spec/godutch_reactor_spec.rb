@@ -39,51 +39,65 @@ describe TestGoDutchReactor do
     TestGoDutchReactor::buffer('')
   end
 
-  describe '#receive_data' do
+  describe '#receive_line' do
     it 'should fail when receiving non-JSON data' do
-      expect {
-        TestGoDutchReactor::receive_data('trash')
-      }.to raise_error(RuntimeError)
+      # JSON returns a different error code on Windows, so simulating this
+      # exception and saving to create the expected output
+      json_error = nil
+      begin
+        JSON.parse('dummy')
+      rescue JSON::ParserError => e
+        json_error = e
+      end
+
+      output = {
+        'name' => nil,
+        'status' => GoDutch::Status::UNKNOWN,
+        'error' => "Error on parsing JSON: '#{json_error}'",
+      }.to_json
+
+      expect { TestGoDutchReactor::receive_line('dummy') }.to(
+        output("#{output}\n").to_stderr
+      )
     end
   end
 
   describe '#check_test' do
     it 'should be able to call a method on test module' do
-      TestGoDutchReactor::receive_data(
-        { 'command' => 'check_test_reactor',
-          'arguments' => []
-        }.to_json
-      )
-      expect(TestGoDutchReactor::buffer.strip).to(
-        eq(
-          { 'name' => 'check_test_reactor',
-            'status' => 2,
-            'output' => 'I have a critical.',
-            'metrics' => [
-              { 'metric1' => 1 },
-              { 'metric2' => 2 },
-            ],
-            'stdout' => 'Something magick happens...',
-          }.to_json
-        )
+      input = {
+        'command' => 'check_test_reactor',
+        'arguments' => []
+      }.to_json
+
+      output = {
+        'name' => 'check_test_reactor',
+        'status' => GoDutch::Status::CRITICAL,
+        'output' => 'I have a critical.',
+        'metrics' => [ { 'metric1' => 1 }, { 'metric2' => 2 }, ],
+        'stdout' => 'Something magick happens...',
+      }.to_json
+
+      expect { TestGoDutchReactor::receive_line("#{input}\n") }.to(
+        output("#{output}\n").to_stdout
       )
     end
   end
 
   describe '#check_bogus' do
     it 'should report failure when calling a bogus check' do
-      TestGoDutchReactor::receive_data(
-        { 'command' => 'check_bogus',
-          'arguments' => [],
-        }.to_json
-      )
-      expect(TestGoDutchReactor::buffer.strip).to(
-        eq(
-          { 'name' => 'check_bogus',
-            'status' => GoDutch::Status::UNKNOWN,
-            'error' => "[ERROR] Invalid command: 'check_bogus'",
-          }.to_json
-        )
+      input = {
+        'command' => 'check_bogus',
+        'arguments' => [],
+      }.to_json
+
+      output = {
+        'name' => 'check_bogus',
+        'status' => GoDutch::Status::UNKNOWN,
+        'error' => "[ERROR] Invalid command: 'check_bogus'",
+      }.to_json
+
+      expect { TestGoDutchReactor::receive_line(input) }.to(
+        output("#{output}\n").to_stderr
       )
     end
   end

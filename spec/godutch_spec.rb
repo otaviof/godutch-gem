@@ -2,6 +2,7 @@ require 'spec_helper'
 
 module TestGoDutch
   include GoDutch::Reactor
+  extend self
 
   def check_test
     success("Everything is o'right.")
@@ -20,84 +21,52 @@ end
 
 
 describe GoDutch do
-  before :all do
-    @socket_path = '/tmp/rspec-godutch.sock'
-    # running a GoDutch instance on a fork, where communication between
-    # processes is executed via regular unix-socket, simulating real usage
-    @pid = fork do
-      ['SIGUSR1', 'EXIT', 'SIGCHLD'].each do |signal|
-        Signal.trap(signal) { exit! }
-      end
+  describe '#receive_line' do
+    it 'should fail when dummy packet is informed' do
+      dummy_error = {
+        'name' => nil,
+        'status' => GoDutch::Status::UNKNOWN,
+        'error' => "Error on parsing JSON: '757: unexpected token at 'dummy''",
+      }.to_json
 
-      puts "*** Running GoDutch on PID #{$$} ***"
-      ENV['GODUTCH_SOCKET_PATH'] = @socket_path
-      ENV['GODUTCH_CHECK_PREFIX'] = 'check_'
-      GoDutch::run(TestGoDutch)
-    end
-    Process.detach(@pid)
-    sleep 1
-  end
-
-  after :all do
-    puts "After all, killing PID '#{@pid}'."
-    Process.kill('SIGUSR1', @pid) rescue Exception
-  end
-
-  describe '#run' do
-    it 'should have received the socket path from environment' do
-      # have received the socket means that event-machine is already handling
-      # it, so it can be found on the file-system
-      expect(File.exists?(@socket_path)).to be_truthy
-    end
-  end
-
-  # testing a included method by GoDutch::Helper, to list local checks
-  describe '#__list_check_methods' do
-    it 'should be able to list checks methods' do
-      socket = UNIXSocket.new(@socket_path) or raise
-      expect(
-        socket.write(
-          { 'command' => '__list_check_methods',
-            'arguments' => [],
-          }.to_json
-        )
-      ).to be_truthy
-      expect(socket.flush()).to be_truthy
-      expect(socket.readline.strip).to(
-        eq(
-          { 'name' => '__list_check_methods',
-            'stdout' =>  ['check_test', 'check_second_test'],
-          }.to_json
-        )
+      expect { TestGoDutch::receive_line('dummy') }.to(
+        output("#{dummy_error}\n").to_stderr
       )
-      socket.close()
     end
-  end
 
-  describe '#check_test' do
-    it 'should be able to receive data on socket' do
-      socket = UNIXSocket.new(@socket_path) or raise
-      expect(
-        socket.write(
-          { 'command' => 'check_test',
-            'arguments' => [],
-          }.to_json
-        )
-      ).to be_truthy
-      expect(socket.flush()).to be_truthy
-      expect(socket.readline.strip).to(
-        eq(
-          { 'name' => 'check_test',
-            'status' => 0,
-            'output' => "Everything is o'right.",
-            'metrics' => [
-              { 'okay' => 1 },
-            ],
-            'stdout' => 'check_test output'
-          }.to_json
-        )
+    it 'should be able to list check methos' do
+      input = {
+        'command' => '__list_check_methods',
+        'arguments' => [],
+      }.to_json
+
+      output = {
+        'name' => '__list_check_methods',
+        'stdout' =>  ['check_test', 'check_second_test'],
+      }.to_json
+
+      expect { TestGoDutch::receive_line("#{input}\n") }.to(
+        output("#{output}\n").to_stdout
       )
-      socket.close()
+    end
+
+    it 'should be able to call a check via this interface' do
+      input = {
+        'command' => 'check_test',
+        'arguments' => [],
+      }.to_json
+
+      output = {
+        'name' => 'check_test',
+        'status' => GoDutch::Status::SUCCESS,
+        'output' => "Everything is o'right.",
+        'metrics' => [ { 'okay' => 1 }, ],
+        'stdout' => 'check_test output'
+      }.to_json
+
+      expect { TestGoDutch::receive_line("#{input}\n") }.to(
+        output("#{output}\n").to_stdout
+      )
     end
   end
 end
