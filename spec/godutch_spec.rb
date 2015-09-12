@@ -23,14 +23,14 @@ end
 describe GoDutch do
   describe '#receive_line' do
     it 'should fail when dummy packet is informed' do
-      dummy_error = {
+      output = {
         'name' => nil,
         'status' => GoDutch::Status::UNKNOWN,
-        'error' => "Error on parsing JSON: '757: unexpected token at 'dummy''",
+        'error' => "Error on parsing JSON: '#{json_exception('dummy')}'",
       }.to_json
 
       expect { TestGoDutch::receive_line('dummy') }.to(
-        output("#{dummy_error}\n").to_stderr
+        output("#{output}\n").to_stderr
       )
     end
 

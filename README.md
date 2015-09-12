@@ -24,7 +24,7 @@ $ export GODUTCH_LATEST_GEM=`/bin/ls -1tr pkg/*.gem |tail -1`
 $ gem install ${GODUTCH_LATEST_GEM}
 ```
 
-And it is not yet compatible with Microsoft Windows.
+Also supported on Microsoft Windows!
 
 
 ## Usage

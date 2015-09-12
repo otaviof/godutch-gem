@@ -12,7 +12,24 @@ require 'godutch/metrics'
 require 'godutch/helper'
 
 
+module Helpers
+  # JSON returns a different error code on Windows, so simulating this
+  # exception and saving to create the expected output.
+  def json_exception(input=nil)
+    json_error = nil
+    begin
+      JSON.parse(input)
+    rescue JSON::ParserError => e
+      json_error = e
+    end
+
+    return json_error
+  end
+end
+
+
 RSpec.configure do |config|
+  config.include(Helpers)
   config.expect_with :rspec do |expectations|
     expectations.syntax = :should, :expect
   end
