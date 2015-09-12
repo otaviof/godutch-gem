@@ -46,7 +46,7 @@ module GoDutch
     end
 
     # Transforms input JSON into a packet or raise exception, using attribute
-    # varaible @payload as input for packet parser.
+    # variable @payload as input for packet parser.
     def parse_input_packet
         packet = GoDutch::Packet.new(@payload)
         @command = packet.command()

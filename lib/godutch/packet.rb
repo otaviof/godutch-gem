@@ -2,7 +2,7 @@ require 'json'
 
 
 module GoDutch
-  # Defines how a Packet, or in orther words a query received from GoDutch
+  # Defines how a Packet, or in other words a query received from GoDutch
   # master daemon is translated into Ruby.
   class Packet
     attr_accessor :command, :arguments
@@ -21,7 +21,7 @@ module GoDutch
     end
 
     # Parses informed JSON payload into command and arguments attributes,
-    # which can be read using attr_accessor
+    # which can be read using 'attr_accessor'
     def parse_payload
       begin
         parsed = JSON.parse(@@payload)

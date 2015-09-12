@@ -4,6 +4,7 @@ module GoDutch
   module Status
     extend self
 
+    # constants representing Nagios-like status
     SUCCESS = 0
     WARNING = 1
     CRITICAL = 2
@@ -41,7 +42,7 @@ module GoDutch
     end
 
     # Methods to represent the status returned by a given check, the only
-    # input is a string with message to ilustrate the status.
+    # input is a string with message to illustrate the status.
     #   +message+   status message (String) or nil as default;
     def critical(message=nil)
       __report(CRITICAL, message)
