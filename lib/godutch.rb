@@ -2,6 +2,7 @@ require 'godutch/version'
 require 'godutch/reactor'
 require 'eventmachine'
 
+
 module GoDutch
   # Runs the reactor through 'eventmachine'.
   #   +reactor+   Reactor module, that extends GoDutch::Reactor;

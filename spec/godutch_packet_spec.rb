@@ -1,12 +1,11 @@
 require 'spec_helper'
 
-
 describe GoDutch::Packet do
   before :all do
     @check_name = 'check_something'
     @packet = GoDutch::Packet.new(
       { 'command' => @check_name,
-        'arguments' => [],
+        'arguments' => []
       }.to_json
     )
   end

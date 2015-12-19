@@ -9,7 +9,7 @@ module GoDutch
     # 'helper_start_with' value. Returns a array of strings, method names.
     def __list_helper_methods
       # avoiding '__self__' and '__id__' symbols with last regex part
-      return self.methods.grep(/^#{@@helper_start_with}.*?[^__]$/) do |method|
+      methods.grep(/^#{@@helper_start_with}.*?[^__]$/) do |method|
         method.to_s
       end
     end
@@ -17,7 +17,7 @@ module GoDutch
     # Look for method names that start with attribute 'checks_start_with'
     # value. Returns a array of strings.
     def __list_check_methods
-      return self.methods.grep(/^#{@@checks_start_with}/) do |method|
+      methods.grep(/^#{@@checks_start_with}/) do |method|
         method.to_s
       end
     end

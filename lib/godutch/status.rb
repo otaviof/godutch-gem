@@ -19,44 +19,40 @@ module GoDutch
 
     # Returns status buffer
     def read_status_buffer
-      return @@status_buffer
+      @@status_buffer
     end
 
     # Saves the latest status on buffer, based on it's state levels (see
     # constants on this module) keeping the highest saved.
     #   +status+  Integer, based on status constants;
     #   +message+ String or default nil;
-    def __report(status, message=nil)
+    def __report(status, message = nil)
       # in case we already have a status being store, and thus the decision
       # method will be based on the highest status
-      unless @@status_buffer.empty?
-        if @@status_buffer['status'] > status
-          return true
-        end
+      if !@@status_buffer.empty? && @@status_buffer['status'] > status
+        return true
+      else
+        # replacing the current status with the highest
+        @@status_buffer = { 'status' => status, 'output' => message }
       end
-
-      @@status_buffer = {
-        'status' => status,
-        'output' => message,
-      }
     end
 
     # Methods to represent the status returned by a given check, the only
     # input is a string with message to illustrate the status.
     #   +message+   status message (String) or nil as default;
-    def critical(message=nil)
+    def critical(message = nil)
       __report(CRITICAL, message)
     end
 
-    def warning(message=nil)
+    def warning(message = nil)
       __report(WARNING, message)
     end
 
-    def success(message=nil)
+    def success(message = nil)
       __report(SUCCESS, message)
     end
 
-    def unknown(message=nil)
+    def unknown(message = nil)
       __report(UNKNOWN, message)
     end
   end
