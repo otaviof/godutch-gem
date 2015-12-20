@@ -1,0 +1,4 @@
+MethodLength:
+  Enabled: false
+Style/ModuleFuncion:
+  Enabled: false

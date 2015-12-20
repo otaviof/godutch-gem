@@ -1,13 +1,13 @@
 require 'spec_helper'
 
+# Dummy module to test GoDutch Reactor.
 module TestGoDutch
   include GoDutch::Reactor
-  extend self
 
   def check_test
     success("Everything is o'right.")
-    metric({ 'okay' => 1 })
-    return 'check_test output'
+    metric('okay' => 1)
+    'check_test output'
   end
 
   def dummy_method
@@ -19,53 +19,39 @@ module TestGoDutch
   end
 end
 
-
 describe GoDutch do
-  describe '#receive_line' do
-    it 'should fail when dummy packet is informed' do
-      output = {
+  include RSpecEM::Client
+  include RSpecEM::Server
+
+  it 'should fail when dummy packet is informed' do
+    spawn_reactor(TestGoDutch, 'dummy') do |resp|
+      expect(resp).to eq(
         'name' => nil,
         'status' => GoDutch::Status::UNKNOWN,
-        'error' => "Error on parsing JSON: '#{json_exception('dummy')}'",
-      }.to_json
-
-      expect { TestGoDutch::receive_line('dummy') }.to(
-        output("#{output}\n").to_stderr
+        'error' => "Error on parsing JSON: '#{json_exception('dummy')}'"
       )
     end
+  end
 
-    it 'should be able to list check methos' do
-      input = {
-        'command' => '__list_check_methods',
-        'arguments' => [],
-      }.to_json
-
-      output = {
+  it 'should be able to list check methos' do
+    input = { 'command' => '__list_check_methods', 'arguments' => [] }.to_json
+    spawn_reactor(TestGoDutch, input) do |resp|
+      expect(resp).to eq(
         'name' => '__list_check_methods',
-        'stdout' =>  ['check_test', 'check_second_test'],
-      }.to_json
-
-      expect { TestGoDutch::receive_line("#{input}\n") }.to(
-        output("#{output}\n").to_stdout
+        'stdout' =>  %w(check_test check_second_test)
       )
     end
+  end
 
-    it 'should be able to call a check via this interface' do
-      input = {
-        'command' => 'check_test',
-        'arguments' => [],
-      }.to_json
-
-      output = {
+  it 'should be able to call a check via this interface' do
+    input = { 'command' => 'check_test', 'arguments' => [] }.to_json
+    spawn_reactor(TestGoDutch, input) do |resp|
+      expect(resp).to eq(
         'name' => 'check_test',
         'status' => GoDutch::Status::SUCCESS,
         'output' => "Everything is o'right.",
-        'metrics' => [ { 'okay' => 1 }, ],
+        'metrics' => [{ 'okay' => 1 }],
         'stdout' => 'check_test output'
-      }.to_json
-
-      expect { TestGoDutch::receive_line("#{input}\n") }.to(
-        output("#{output}\n").to_stdout
       )
     end
   end

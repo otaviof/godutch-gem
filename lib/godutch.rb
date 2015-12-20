@@ -14,8 +14,12 @@ module GoDutch
         Signal.trap(signal) { EM.stop_event_loop }
       end
 
-      # staring event machine to capture events on STDIN
-      EM.attach($stdin, reactor)
+      File.umask(0000)
+      socket_file = '/tmp/ruby-starlite.sock'
+      File.unlink(socket_file) if File.exist?(socket_file)
+
+      # starting event machine to listen to events on socket file
+      EM.start_unix_domain_server(socket_file, reactor)
     end
   end
 end
