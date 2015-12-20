@@ -1,28 +1,27 @@
 require 'spec_helper'
 
-
 describe GoDutch::Status do
   describe '#warning' do
     it 'should be able to call warning status' do
-      expect(GoDutch::Status::warning('warning')).to be_truthy
+      expect(GoDutch::Status.warning('warning')).to be_truthy
     end
   end
 
   describe '#critical' do
     it 'should be able to call warning status' do
-      expect(GoDutch::Status::critical('critical')).to be_truthy
+      expect(GoDutch::Status.critical('critical')).to be_truthy
     end
   end
 
   describe '#success' do
     it 'should be able to call warning status' do
-      expect(GoDutch::Status::success('success')).to be_truthy
+      expect(GoDutch::Status.success('success')).to be_truthy
     end
   end
 
   describe '#unknown' do
     it 'should be able to call warning status' do
-      GoDutch::Status::unknown('unknown').should be_truthy
+      GoDutch::Status.unknown('unknown').should be_truthy
     end
   end
 
@@ -40,8 +39,8 @@ describe GoDutch::Status do
       success('success').should be_truthy
       warning('warning').should be_truthy
 
-      expect(read_status_buffer()).to have_key('status')
-      expect(read_status_buffer()).to have_key('output')
+      expect(read_status_buffer).to have_key('status')
+      expect(read_status_buffer).to have_key('output')
       expect(read_status_buffer['output']).to eq('unknown')
       expect(read_status_buffer['status']).to eq(GoDutch::Status::UNKNOWN)
     end
