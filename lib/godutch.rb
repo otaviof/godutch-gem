@@ -7,8 +7,6 @@ module GoDutch
   # Runs the reactor through 'eventmachine'.
   #   +reactor+   Reactor module, that extends GoDutch::Reactor;
   def self.run(reactor)
-    $stdout.sync = true
-
     EM.run do
       %w(EXIT SIGCHLD SIGUSR1).each do |signal|
         Signal.trap(signal) { EM.stop_event_loop }
