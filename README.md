@@ -67,7 +67,7 @@ module MyApp
         critical('Way too many users!')
       end
 
-      metric({ 'myapp_connected_users' => connected_users })
+      metric('myapp_connected_users' => connected_users)
     end
   end
 end
