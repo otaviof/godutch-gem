@@ -22,7 +22,9 @@ module GoDutch
       File.unlink(socket_file) if File.exist?(socket_file)
 
       # starting event machine to listen to events on socket file
-      EM.next_tick { EM.start_unix_domain_server(socket_file.to_s, reactor) }
+      EM.next_tick do
+        EM.start_unix_domain_server(socket_file.to_s, reactor)
+      end
     end
   end
 end

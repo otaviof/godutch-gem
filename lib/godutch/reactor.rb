@@ -80,10 +80,6 @@ module GoDutch
       # final return on method is also saved
       @output['stdout'] = command_output.flatten
     end
-
-    def unbind
-      EM.stop
-    end
   end
 end
 
