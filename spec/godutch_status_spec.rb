@@ -40,8 +40,8 @@ describe GoDutch::Status do
       warning('warning').should be_truthy
 
       expect(read_status_buffer).to have_key('status')
-      expect(read_status_buffer).to have_key('output')
-      expect(read_status_buffer['output']).to eq('unknown')
+      expect(read_status_buffer).to have_key('stdout')
+      expect(read_status_buffer['stdout'][0]).to eq('unknown')
       expect(read_status_buffer['status']).to eq(GoDutch::Status::UNKNOWN)
     end
   end

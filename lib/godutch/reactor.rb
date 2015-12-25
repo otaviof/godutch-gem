@@ -34,6 +34,7 @@ module GoDutch
         }
       end
       send_data(@output.to_json)
+      close_connection_after_writing
     end
 
     # Transforms input JSON into a packet or raise exception, using attribute
@@ -56,18 +57,18 @@ module GoDutch
       # initializing output with command name
       @output = { 'name' => @command }
       # where command converted into method will store it's return
-      command_output = nil
+      command_output = []
 
       case
       when @helper_methods.include?(@command)
         # only calling method name
-        command_output = public_send(@command)
+        command_output << public_send(@command)
       when @check_methods.include?(@command)
         # reseting all the buffers we accumulate for a given check
         reset_status_buffer
         reset_metrics_buffer
         # calling method with command name
-        command_output = public_send(@command)
+        command_output << public_send(@command)
         # collecting output of status methods (from GoDutch::Status)
         @output.merge!(read_status_buffer)
         # collecting metrics (from GoDutch::Metrics)
@@ -77,7 +78,7 @@ module GoDutch
       end
 
       # final return on method is also saved
-      @output['stdout'] = command_output
+      @output['stdout'] = command_output.flatten
     end
 
     def unbind

@@ -33,7 +33,7 @@ module GoDutch
         return true
       else
         # replacing the current status with the highest
-        @@status_buffer = { 'status' => status, 'output' => message }
+        @@status_buffer = { 'status' => status, 'stdout' => [message] }
       end
     end
 
