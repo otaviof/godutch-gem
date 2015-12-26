@@ -24,7 +24,7 @@ describe GoDutch do
   include RSpecEM::Server
 
   it 'should fail when dummy packet is informed' do
-    spawn_reactor(TestGoDutch, 'dummy') do |resp|
+    spawn_reactor(TestGoDutch, "dummy\n") do |resp|
       expect(resp).to eq(
         'name' => nil,
         'status' => GoDutch::Status::UNKNOWN,
@@ -35,7 +35,7 @@ describe GoDutch do
 
   it 'should be able to list check methos' do
     input = { 'command' => '__list_check_methods', 'arguments' => [] }.to_json
-    spawn_reactor(TestGoDutch, input) do |resp|
+    spawn_reactor(TestGoDutch, input + "\n") do |resp|
       expect(resp).to eq(
         'name' => '__list_check_methods',
         'stdout' =>  %w(check_test check_second_test)
@@ -45,13 +45,12 @@ describe GoDutch do
 
   it 'should be able to call a check via this interface' do
     input = { 'command' => 'check_test', 'arguments' => [] }.to_json
-    spawn_reactor(TestGoDutch, input) do |resp|
+    spawn_reactor(TestGoDutch, input + "\n") do |resp|
       expect(resp).to eq(
         'name' => 'check_test',
         'status' => GoDutch::Status::SUCCESS,
-        'output' => "Everything is o'right.",
         'metrics' => [{ 'okay' => 1 }],
-        'stdout' => 'check_test output'
+        'stdout' => ['check_test output']
       )
     end
   end

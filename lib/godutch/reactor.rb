@@ -12,13 +12,14 @@ module GoDutch
   # implements input and output using the GoDutch simple procolo encapsulated
   # in JSON format.
   module Reactor
+    include EM::Protocols::LineProtocol
     include GoDutch::Helper
     include GoDutch::Status
     include GoDutch::Metrics
 
     # Method to handle unix-socket EM interface
     #   +payload+  unix-socket payload;
-    def receive_data(payload = nil)
+    def receive_line(payload = nil)
       @payload = payload
       @output = {}
       @command = nil
