@@ -56,7 +56,7 @@ module GoDutch
     # name and remaps into reactor's function.
     def execute_command
       # initializing output with command name
-      @output = { 'name' => @command }
+      @output = { 'name' => @command, 'stdout' => [] }
       # where command converted into method will store it's return
       command_output = []
 
@@ -78,8 +78,9 @@ module GoDutch
         fail "[ERROR] Invalid command: '#{@command}'"
       end
 
-      # final return on method is also saved
-      @output['stdout'] = command_output.flatten
+      # final return on method is saved on the bottom of this flat array
+      @output['stdout'] << command_output.flatten
+      @output['stdout'] = @output['stdout'].flatten
     end
   end
 end

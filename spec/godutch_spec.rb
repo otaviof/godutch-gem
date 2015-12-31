@@ -50,7 +50,7 @@ describe GoDutch do
         'name' => 'check_test',
         'status' => GoDutch::Status::SUCCESS,
         'metrics' => [{ 'okay' => 1 }],
-        'stdout' => ['check_test output']
+        'stdout' => ["Everything is o'right.", 'check_test output']
       )
     end
   end
